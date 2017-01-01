@@ -1,0 +1,17 @@
+#player1Grid, #player2Grid {
+  position: absolute;
+  path.cell {
+    transform: translate(225px, 225px);
+    transition: all .25s ease;
+    fill: transparent;
+    stroke: black;
+  }
+}
+
+#player1Grid {
+  left: 2rem;
+}
+
+#player2Grid {
+  right: 2rem;
+}

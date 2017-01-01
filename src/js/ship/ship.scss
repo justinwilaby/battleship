@@ -1,0 +1,20 @@
+svg g[id^="ship_"] {
+  &[draggable] {
+    cursor: move;
+    path[id^="rotate_"]{
+      visibility: visible;
+    }
+  }
+  text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  path[id^="rotate_"]{
+    cursor: pointer;
+    pointer-events: bounding-box;
+    visibility: hidden;
+  }
+}
