@@ -1,4 +1,11 @@
+@font-face {
+  font-family: 'D Day Stencil';
+  src: url('../fonts/D_Day_Stencil.woff') format('woff'),
+  url('../fonts/D_Day_Stencil.ttf') format('truetype');
+}
+
 body {
+  font-family: D Day Stencil, sans-serif;
   background: #333;
   overflow: hidden;
   padding: 0;
@@ -17,10 +24,20 @@ body {
   height: 800px;
 }
 
-#start {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  z-index: 9999;
+button {
+  font-family: D Day Stencil, sans-serif;
+  font-size: 25px;
+  border: 1px solid #2174b9;
+  background: #8296a7;
+  border-radius: 10px;
+  outline: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+
+  }
 }

@@ -1,6 +1,6 @@
-import {allShipTypes} from '../enum/ShipTypeEnum';
-import ShipModel from './ShipModel';
 import {bindable} from 'bind-property';
+import {allShipTypes} from '../enum/ShipTypeEnum';
+import ShipModel from './ShipModel'
 
 function generateDefaultShips() {
     const ships = [];

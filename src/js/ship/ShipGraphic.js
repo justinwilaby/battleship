@@ -61,9 +61,10 @@ class ShipGraphic {
         }
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         text.textContent = '' + type;
-        text.setAttribute('font-family', 'Verdana');
-        text.setAttribute('font-size', '20');
-        text.setAttribute('y', '25');
+        text.setAttribute('font-family', 'D Day Stencil');
+        text.setAttribute('font-size', '30');
+        text.setAttribute('y', '28');
+        text.setAttribute('x', '5');
         element.appendChild(text);
         element.appendChild(this.rotateArrow);
         return element;

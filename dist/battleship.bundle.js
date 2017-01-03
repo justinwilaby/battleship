@@ -48,19 +48,23 @@
 	
 	__webpack_require__(1);
 	
-	var _Board = __webpack_require__(5);
+	var _Board = __webpack_require__(7);
 	
 	var _Board2 = _interopRequireDefault(_Board);
 	
-	var _GamePlay = __webpack_require__(22);
+	var _Console = __webpack_require__(24);
+	
+	var _Console2 = _interopRequireDefault(_Console);
+	
+	var _GamePlay = __webpack_require__(29);
 	
 	var _GamePlay2 = _interopRequireDefault(_GamePlay);
 	
-	var _PlayerModel = __webpack_require__(28);
+	var _PlayerModel = __webpack_require__(34);
 	
 	var _PlayerModel2 = _interopRequireDefault(_PlayerModel);
 	
-	var _animateBoardRender = __webpack_require__(32);
+	var _animateBoardRender = __webpack_require__(38);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -68,16 +72,16 @@
 	var player2 = new _PlayerModel2.default();
 	var board = new _Board2.default(player1, player2);
 	document.body.appendChild(board.render());
+	
 	var grids = board.boardGraphic.grids;
+	var console = new _Console2.default(grids[0], player1, player2);
+	document.body.appendChild(console.render());
+	
 	grids.forEach(function (grid) {
 	    (0, _animateBoardRender.animateBoard)(grid, 50, 10);
 	});
-	var game = new _GamePlay2.default(grids, player1, player2);
 	
-	var startButton = document.getElementById('start');
-	startButton.addEventListener('click', function () {
-	    game.startGame();
-	});
+	var game = new _GamePlay2.default(grids, player1, player2);
 
 /***/ },
 /* 1 */
@@ -89,7 +93,7 @@
 	var content = __webpack_require__(2);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -114,7 +118,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n  background: #333;\n  overflow: hidden;\n  padding: 0;\n  margin: 0;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n#battleshipBoard {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 100%;\n  height: 800px; }\n\n#start {\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  top: 50%;\n  z-index: 9999; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: 'D Day Stencil';\n  src: url(" + __webpack_require__(4) + ") format(\"woff\"), url(" + __webpack_require__(5) + ") format(\"truetype\"); }\n\nbody {\n  font-family: D Day Stencil, sans-serif;\n  background: #333;\n  overflow: hidden;\n  padding: 0;\n  margin: 0;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n#battleshipBoard {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 100%;\n  height: 800px; }\n\nbutton {\n  font-family: D Day Stencil, sans-serif;\n  font-size: 25px;\n  border: 1px solid #2174b9;\n  background: #8296a7;\n  border-radius: 10px;\n  outline: none; }\n\nul {\n  list-style: none;\n  padding: 0;\n  margin: 0; }\n", ""]);
 	
 	// exports
 
@@ -176,6 +180,18 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "fonts/D_Day_Stencil.woff";
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "fonts/D_Day_Stencil.ttf";
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -427,7 +443,7 @@
 
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -438,15 +454,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _BoardGraphic = __webpack_require__(6);
+	var _BoardGraphic = __webpack_require__(8);
 	
 	var _BoardGraphic2 = _interopRequireDefault(_BoardGraphic);
 	
-	var _findCells = __webpack_require__(18);
+	var _findCells = __webpack_require__(20);
 	
-	var _findCellAtPoint = __webpack_require__(20);
+	var _findCellAtPoint = __webpack_require__(22);
 	
-	var _getMoreCellsFromCell = __webpack_require__(21);
+	var _getMoreCellsFromCell = __webpack_require__(23);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -571,9 +587,6 @@
 	                    _this3.setHighlightedCells([]);
 	                }, 500);
 	            }
-	            if (!allowChange) {
-	                debugger;
-	            }
 	            return allowChange;
 	        }
 	    }, {
@@ -648,7 +661,7 @@
 	exports.default = Board;
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -659,9 +672,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(7);
+	__webpack_require__(9);
 	
-	var _Ship = __webpack_require__(9);
+	var _Ship = __webpack_require__(11);
 	
 	var _Ship2 = _interopRequireDefault(_Ship);
 	
@@ -770,16 +783,16 @@
 	exports.default = BoardGraphic;
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(8);
+	var content = __webpack_require__(10);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -796,7 +809,7 @@
 	}
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -810,7 +823,7 @@
 
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -821,13 +834,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _ShipGraphic = __webpack_require__(10);
+	var _ShipGraphic = __webpack_require__(12);
 	
 	var _ShipGraphic2 = _interopRequireDefault(_ShipGraphic);
 	
-	var _findNodeAtPoint = __webpack_require__(16);
+	var _findNodeAtPoint = __webpack_require__(18);
 	
-	var _alignElementToCell2 = __webpack_require__(17);
+	var _alignElementToCell2 = __webpack_require__(19);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -996,7 +1009,6 @@
 	                    x = _alignElementToCell.x,
 	                    y = _alignElementToCell.y;
 	
-	                console.log(x, y, source.type);
 	                this.translate(x, y, true);
 	            }
 	        }
@@ -1055,7 +1067,7 @@
 	exports.default = Ship;
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1066,15 +1078,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SVGTransform = __webpack_require__(11);
+	var _SVGTransform = __webpack_require__(13);
 	
 	var _SVGTransform2 = _interopRequireDefault(_SVGTransform);
 	
-	var _rotate = __webpack_require__(13);
+	var _rotate = __webpack_require__(15);
 	
 	var _rotate2 = _interopRequireDefault(_rotate);
 	
-	__webpack_require__(14);
+	__webpack_require__(16);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1119,9 +1131,10 @@
 	            }
 	            var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 	            text.textContent = '' + type;
-	            text.setAttribute('font-family', 'Verdana');
-	            text.setAttribute('font-size', '20');
-	            text.setAttribute('y', '25');
+	            text.setAttribute('font-family', 'D Day Stencil');
+	            text.setAttribute('font-size', '30');
+	            text.setAttribute('y', '28');
+	            text.setAttribute('x', '5');
 	            element.appendChild(text);
 	            element.appendChild(this.rotateArrow);
 	            return element;
@@ -1165,7 +1178,7 @@
 	exports.default = ShipGraphic;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1221,8 +1234,8 @@
 	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 	 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
-	var degToRads = __webpack_require__(12).degToRads;
-	var radToDeg = __webpack_require__(12).radToDeg;
+	var degToRads = __webpack_require__(14).degToRads;
+	var radToDeg = __webpack_require__(14).radToDeg;
 	
 	var SVGTransform = function () {
 	    function SVGTransform() {
@@ -1461,7 +1474,7 @@
 	module.exports = SVGTransform;
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1507,7 +1520,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1518,16 +1531,16 @@
 	exports.default = "M12.241,9.37h-1.43C10.05,4.08,5.51,0,0,0c-4.25,0-7.93,2.44-9.74,5.98l2.94,1.13\n\t\tc1.34-2.38,3.88-3.99,6.81-3.99c3.78,0,6.93,2.68,7.65,6.25H5.78C5.541,9.6,5.311,9.75,5.651,10.16l2.91,2.959\n\t\tc0.239,0.23,0.629,0.23,0.869,0l2.93-2.959C12.61,9.92,12.491,9.6,12.241,9.37z M0.01,18.74c-3.5,0-6.45-2.301-7.45-5.471h1.71\n\t\tc0.24-0.229,0.37-0.55,0.13-0.789l-2.94-2.96c-0.24-0.23-0.63-0.23-0.87,0l-2.91,2.97c-0.35,0.41-0.12,0.55,0.13,0.789h1.43\n\t\tc0.85,4.631,5.34,8.59,10.78,8.59c3.98,0,7.451-2.129,9.36-5.309L6.42,15.39C5,17.41,2.661,18.74,0.01,18.74z";
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(15);
+	var content = __webpack_require__(17);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1544,7 +1557,7 @@
 	}
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -1558,7 +1571,7 @@
 
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1585,7 +1598,7 @@
 	}
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1605,7 +1618,7 @@
 	}
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1615,7 +1628,7 @@
 	});
 	exports.findCells = findCells;
 	
-	var _getCell = __webpack_require__(19);
+	var _getCell = __webpack_require__(21);
 	
 	function findCells(shipSegment, board, direction) {
 	    if (!shipSegment) {
@@ -1656,7 +1669,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1673,7 +1686,7 @@
 	}
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1696,7 +1709,7 @@
 	}
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1706,7 +1719,7 @@
 	});
 	exports.getMoreCellsFromCell = getMoreCellsFromCell;
 	
-	var _getCell = __webpack_require__(19);
+	var _getCell = __webpack_require__(21);
 	
 	function getMoreCellsFromCell(grid, cell, direction, n) {
 	    var cellRect = cell.getBoundingClientRect();
@@ -1729,7 +1742,7 @@
 	}
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1740,13 +1753,216 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _getHitInfo = __webpack_require__(23);
+	__webpack_require__(25);
 	
-	var _Computer = __webpack_require__(24);
+	var _randomizeShips = __webpack_require__(27);
+	
+	var _console = __webpack_require__(28);
+	
+	var _console2 = _interopRequireDefault(_console);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Console = function () {
+	    function Console(grid, player1, player2) {
+	        _classCallCheck(this, Console);
+	
+	        Object.assign(this, {
+	            grid: grid,
+	            player1: player1,
+	            player2: player2,
+	            playerModelChangeHandler: this.playerModelChangeHandler.bind(this),
+	            randomizeButtonClickHandler: this.randomizeButtonClickHandler.bind(this)
+	        });
+	    }
+	
+	    _createClass(Console, [{
+	        key: 'render',
+	        value: function render() {
+	            var element = this.element;
+	            element.innerHTML = _console2.default;
+	            this.postRenderActions();
+	            return element;
+	        }
+	    }, {
+	        key: 'postRenderActions',
+	        value: function postRenderActions() {
+	            var randomizeButton = this.element.querySelector('#randomize');
+	            randomizeButton.addEventListener('click', this.randomizeButtonClickHandler);
+	        }
+	    }, {
+	        key: 'playerModelChangeHandler',
+	        value: function playerModelChangeHandler() {}
+	    }, {
+	        key: 'randomizeButtonClickHandler',
+	        value: function randomizeButtonClickHandler() {
+	            (0, _randomizeShips.randomizeShips)(this.grid, this.player1);
+	        }
+	    }, {
+	        key: 'element',
+	        get: function get() {
+	            if (!this._element) {
+	                this._element = document.createElement('section');
+	                this._element.id = 'console';
+	            }
+	            return this._element;
+	        }
+	    }, {
+	        key: 'player1',
+	        get: function get() {
+	            return this._player1;
+	        },
+	        set: function set(value) {
+	            if (this._player1 === value) return;
+	
+	            if (this._player1) {
+	                this._player1.removeChangeListener(this.playerModelChangeHandler);
+	            }
+	            this._player1 = value;
+	            this._player1.addChangeListener(this.playerModelChangeHandler);
+	        }
+	    }, {
+	        key: 'player2',
+	        get: function get() {
+	            return this._player2;
+	        },
+	        set: function set(value) {
+	            if (this._player2 === value) return;
+	
+	            if (this._player2) {
+	                this._player2.removeChangeListener(this.playerModelChangeHandler);
+	            }
+	            this._player2 = value;
+	            this._player2.addChangeListener(this.playerModelChangeHandler);
+	        }
+	    }]);
+	
+	    return Console;
+	}();
+	
+	exports.default = Console;
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(26);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(6)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./console.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./console.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#console {\n  width: 300px;\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  top: 50%;\n  z-index: 9999; }\n  #console .stats {\n    margin-bottom: 20px;\n    display: flex; }\n    #console .stats ul {\n      width: 100%;\n      font-size: 24px; }\n      #console .stats ul li:first-of-type {\n        padding-bottom: 10px;\n        border-bottom: 1px solid black; }\n      #console .stats ul + ul {\n        position: relative;\n        padding-left: 20px; }\n        #console .stats ul + ul::before {\n          content: '';\n          position: absolute;\n          border-left: 1px solid black;\n          height: 100%;\n          left: 10px; }\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.randomizeShips = randomizeShips;
+	
+	var _getCell = __webpack_require__(21);
+	
+	var floor = Math.floor;
+	var random = Math.random;
+	
+	function randomizeShips(grid, playerModel) {
+	    var occupiedCellsSet = playerModel.occupiedCellsSet;
+	    occupiedCellsSet.clear();
+	    var shipModels = playerModel.ships;
+	    shipModels.forEach(function (shipModel) {
+	        var _findUnusedCells = findUnusedCells(grid, occupiedCellsSet, getRandomStartPoint(), floor(random() * 2), shipModel.type.size),
+	            cells = _findUnusedCells.cells,
+	            direction = _findUnusedCells.direction;
+	
+	        shipModel.occupiedCells = cells;
+	        shipModel.direction = direction;
+	        cells.forEach(function (cell) {
+	            occupiedCellsSet.add(cell);
+	        });
+	    });
+	}
+	
+	function findUnusedCells(board, occupiedCellsSet, pt, direction, n) {
+	    var axis = direction ? 'y' : 'x';
+	    if (pt[axis] + n > 9) {
+	        return findUnusedCells(board, occupiedCellsSet, getRandomStartPoint(), direction, n);
+	    }
+	    var cells = [];
+	    for (var i = 0; i < n; i++) {
+	        var cell = (0, _getCell.getCell)(board, pt.y, pt.x);
+	        if (occupiedCellsSet.has(cell)) {
+	            return findUnusedCells(board, occupiedCellsSet, getRandomStartPoint(), direction, n);
+	        }
+	        cells[i] = cell;
+	        pt[axis]++;
+	    }
+	    return { cells: cells, direction: direction };
+	}
+	
+	function getRandomStartPoint() {
+	    return { x: floor(random() * 10), y: floor(random() * 10) };
+	}
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	module.exports = "<section id=console> <div class=stats> <ul id=player1> <li>Player 1</li> <li>hits: <span>0</span></li> <li>attempts: <span>0</span></li> <li>accuracy: <span>0</span>%</li> </ul> <ul id=player2> <li>Computer</li> <li>hits: <span>0</span></li> <li>attempts: <span>0</span></li> <li>accuracy: <span>0</span>%</li> </ul> </div> <button id=randomize>Randomize Ships</button> <button id=start>Start Game</button> </section>";
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _getHitInfo = __webpack_require__(30);
+	
+	var _Computer = __webpack_require__(31);
 	
 	var _Computer2 = _interopRequireDefault(_Computer);
 	
-	var _Human = __webpack_require__(27);
+	var _Human = __webpack_require__(33);
 	
 	var _Human2 = _interopRequireDefault(_Human);
 	
@@ -1823,7 +2039,7 @@
 	exports.default = GamePlay;
 
 /***/ },
-/* 23 */
+/* 30 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1848,7 +2064,7 @@
 	}
 
 /***/ },
-/* 24 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1857,11 +2073,11 @@
 	    value: true
 	});
 	
-	var _Player2 = __webpack_require__(25);
+	var _Player2 = __webpack_require__(32);
 	
 	var _Player3 = _interopRequireDefault(_Player2);
 	
-	var _randomizeShips = __webpack_require__(26);
+	var _randomizeShips = __webpack_require__(27);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1895,7 +2111,7 @@
 	exports.default = Computer;
 
 /***/ },
-/* 25 */
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1917,9 +2133,6 @@
 	    }
 	
 	    _createClass(Player, [{
-	        key: "yourTurn",
-	        value: function yourTurn() {}
-	    }, {
 	        key: "playerModelChanged",
 	        value: function playerModelChanged(source, changes) {}
 	    }]);
@@ -1930,68 +2143,7 @@
 	exports.default = Player;
 
 /***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.randomizeShips = randomizeShips;
-	
-	var _getCell = __webpack_require__(19);
-	
-	var floor = Math.floor;
-	var random = Math.random;
-	
-	function randomizeShips(grid, playerModel) {
-	    var occupiedCellsSet = playerModel.occupiedCellsSet;
-	    occupiedCellsSet.forEach(function (cell) {
-	        cell.style.fill = '';
-	    });
-	    occupiedCellsSet.clear();
-	    var shipModels = playerModel.ships;
-	    shipModels.forEach(function (shipModel) {
-	        var _findUnusedCells = findUnusedCells(grid, occupiedCellsSet, getRandomStartPoint(), floor(random() * 2), shipModel.type.size),
-	            cells = _findUnusedCells.cells,
-	            direction = _findUnusedCells.direction;
-	
-	        if (shipModel.type.size !== cells.length) {
-	            debugger;
-	        }
-	        shipModel.occupiedCells = cells;
-	        shipModel.direction = direction;
-	        cells.forEach(function (cell) {
-	            occupiedCellsSet.add(cell);
-	            cell.style.fill = 'yellow';
-	        });
-	    });
-	}
-	
-	function findUnusedCells(board, occupiedCellsSet, pt, direction, n) {
-	    var axis = direction ? 'y' : 'x';
-	    if (pt[axis] + n > 9) {
-	        return findUnusedCells(board, occupiedCellsSet, getRandomStartPoint(), direction, n);
-	    }
-	    var cells = [];
-	    for (var i = 0; i < n; i++) {
-	        var cell = (0, _getCell.getCell)(board, pt.y, pt.x);
-	        if (occupiedCellsSet.has(cell)) {
-	            return findUnusedCells(board, occupiedCellsSet, getRandomStartPoint(), direction, n);
-	        }
-	        cells[i] = cell;
-	        pt[axis]++;
-	    }
-	    return { cells: cells, direction: direction };
-	}
-	
-	function getRandomStartPoint() {
-	    return { x: floor(random() * 10), y: floor(random() * 10) };
-	}
-
-/***/ },
-/* 27 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2000,11 +2152,13 @@
 	    value: true
 	});
 	
-	var _Player2 = __webpack_require__(25);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _Player2 = __webpack_require__(32);
 	
 	var _Player3 = _interopRequireDefault(_Player2);
 	
-	var _randomizeShips = __webpack_require__(26);
+	var _findCellAtPoint = __webpack_require__(22);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2028,9 +2182,20 @@
 	
 	        var _this = _possibleConstructorReturn(this, (_ref = Human.__proto__ || Object.getPrototypeOf(Human)).call.apply(_ref, [this].concat(args)));
 	
-	        (0, _randomizeShips.randomizeShips)(_this.allyGrid, _this.playerModel);
+	        _this.opponentGrid.addEventListener('click', _this.opponentGridClickHandler);
 	        return _this;
 	    }
+	
+	    _createClass(Human, [{
+	        key: 'opponentGridClickHandler',
+	        value: function opponentGridClickHandler(event) {
+	            var pageX = event.pageX,
+	                pageY = event.pageY,
+	                currentTarget = event.currentTarget;
+	
+	            var cell = (0, _findCellAtPoint.findCellAtPoint)(pageX, pageY, currentTarget);
+	        }
+	    }]);
 	
 	    return Human;
 	}(_Player3.default);
@@ -2038,7 +2203,7 @@
 	exports.default = Human;
 
 /***/ },
-/* 28 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2051,13 +2216,13 @@
 	
 	var _dec, _class;
 	
-	var _ShipTypeEnum = __webpack_require__(29);
+	var _bindProperty = __webpack_require__(35);
 	
-	var _ShipModel = __webpack_require__(30);
+	var _ShipTypeEnum = __webpack_require__(36);
+	
+	var _ShipModel = __webpack_require__(37);
 	
 	var _ShipModel2 = _interopRequireDefault(_ShipModel);
-	
-	var _bindProperty = __webpack_require__(31);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2108,97 +2273,7 @@
 	exports.default = PlayerModel;
 
 /***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var allShipTypes = exports.allShipTypes = [];
-	
-	var ShipTypeEnum = function () {
-	    function ShipTypeEnum(size, name, maxAllowed) {
-	        _classCallCheck(this, ShipTypeEnum);
-	
-	        if (Object.isFrozen(ShipTypeEnum)) {
-	            throw new Error('The ShipTypeEnum cannot be constructed');
-	        }
-	        Object.assign(this, { size: size, name: name, maxAllowed: maxAllowed });
-	        Object.freeze(this);
-	        allShipTypes.push(this);
-	    }
-	
-	    _createClass(ShipTypeEnum, [{
-	        key: 'toString',
-	        value: function toString() {
-	            return this.name;
-	        }
-	    }]);
-	
-	    return ShipTypeEnum;
-	}();
-	
-	ShipTypeEnum.CORVETE = new ShipTypeEnum(2, 'Corvette', 1);
-	ShipTypeEnum.FRIGATE = new ShipTypeEnum(3, 'Frigate', 2);
-	ShipTypeEnum.DESTROYER = new ShipTypeEnum(4, 'Destroyer', 1);
-	ShipTypeEnum.CARRIER = new ShipTypeEnum(5, 'Carrier', 1);
-	
-	Object.freeze(ShipTypeEnum);
-	
-	exports.default = ShipTypeEnum;
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _dec, _dec2, _dec3, _class;
-	
-	var _bindProperty = __webpack_require__(31);
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var ShipModel = (_dec = (0, _bindProperty.bindable)('hits'), _dec2 = (0, _bindProperty.bindable)('direction'), _dec3 = (0, _bindProperty.bindable)('occupiedCells'), _dec(_class = _dec2(_class = _dec3(_class = function () {
-	    function ShipModel(_ref) {
-	        var _ref$hits = _ref.hits,
-	            hits = _ref$hits === undefined ? [] : _ref$hits,
-	            type = _ref.type,
-	            _ref$direction = _ref.direction,
-	            direction = _ref$direction === undefined ? 0 : _ref$direction,
-	            occupiedCells = _ref.occupiedCells;
-	
-	        _classCallCheck(this, ShipModel);
-	
-	        Object.assign(this, { hits: hits, type: type, direction: direction, occupiedCells: occupiedCells });
-	    }
-	
-	    _createClass(ShipModel, [{
-	        key: 'toString',
-	        value: function toString() {
-	            return '' + this.type;
-	        }
-	    }]);
-	
-	    return ShipModel;
-	}()) || _class) || _class) || _class);
-	exports.default = ShipModel;
-
-/***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -2489,7 +2564,97 @@
 	});
 
 /***/ },
-/* 32 */
+/* 36 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var allShipTypes = exports.allShipTypes = [];
+	
+	var ShipTypeEnum = function () {
+	    function ShipTypeEnum(size, name, maxAllowed) {
+	        _classCallCheck(this, ShipTypeEnum);
+	
+	        if (Object.isFrozen(ShipTypeEnum)) {
+	            throw new Error('The ShipTypeEnum cannot be constructed');
+	        }
+	        Object.assign(this, { size: size, name: name, maxAllowed: maxAllowed });
+	        Object.freeze(this);
+	        allShipTypes.push(this);
+	    }
+	
+	    _createClass(ShipTypeEnum, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return this.name;
+	        }
+	    }]);
+	
+	    return ShipTypeEnum;
+	}();
+	
+	ShipTypeEnum.CORVETE = new ShipTypeEnum(2, 'Corvette', 1);
+	ShipTypeEnum.FRIGATE = new ShipTypeEnum(3, 'Frigate', 2);
+	ShipTypeEnum.DESTROYER = new ShipTypeEnum(4, 'Destroyer', 1);
+	ShipTypeEnum.CARRIER = new ShipTypeEnum(5, 'Carrier', 1);
+	
+	Object.freeze(ShipTypeEnum);
+	
+	exports.default = ShipTypeEnum;
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _dec, _dec2, _dec3, _class;
+	
+	var _bindProperty = __webpack_require__(35);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ShipModel = (_dec = (0, _bindProperty.bindable)('hits'), _dec2 = (0, _bindProperty.bindable)('direction'), _dec3 = (0, _bindProperty.bindable)('occupiedCells'), _dec(_class = _dec2(_class = _dec3(_class = function () {
+	    function ShipModel(_ref) {
+	        var _ref$hits = _ref.hits,
+	            hits = _ref$hits === undefined ? [] : _ref$hits,
+	            type = _ref.type,
+	            _ref$direction = _ref.direction,
+	            direction = _ref$direction === undefined ? 0 : _ref$direction,
+	            occupiedCells = _ref.occupiedCells;
+	
+	        _classCallCheck(this, ShipModel);
+	
+	        Object.assign(this, { hits: hits, type: type, direction: direction, occupiedCells: occupiedCells });
+	    }
+	
+	    _createClass(ShipModel, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '' + this.type;
+	        }
+	    }]);
+	
+	    return ShipModel;
+	}()) || _class) || _class) || _class);
+	exports.default = ShipModel;
+
+/***/ },
+/* 38 */
 /***/ function(module, exports) {
 
 	'use strict';

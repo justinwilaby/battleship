@@ -8,10 +8,6 @@ class Player {
         this.playerModelChanged = this.playerModelChanged.bind(this);
     }
 
-    yourTurn() {
-
-    }
-
     playerModelChanged(source, changes) {
 
     }

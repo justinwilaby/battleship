@@ -1,9 +1,15 @@
 import Player from './Player';
-import {randomizeShips} from '../utils/randomizeShips';
+import {findCellAtPoint} from '../utils/findCellAtPoint';
+
 class Human extends Player {
     constructor(...args) {
         super(...args);
-        randomizeShips(this.allyGrid, this.playerModel);
+        this.opponentGrid.addEventListener('click', this.opponentGridClickHandler);
+    }
+
+    opponentGridClickHandler(event) {
+        const {pageX, pageY, currentTarget} = event;
+        const cell = findCellAtPoint(pageX, pageY, currentTarget);
     }
 }
 

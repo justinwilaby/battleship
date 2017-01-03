@@ -1,0 +1,31 @@
+#console {
+  width: 300px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  z-index: 9999;
+  .stats {
+    margin-bottom: 20px;
+    display: flex;
+    ul {
+      width: 100%;
+      font-size: 24px;
+      li:first-of-type {
+        padding-bottom: 10px;
+        border-bottom: 1px solid black;
+      }
+      & + ul {
+        position: relative;
+        &::before {
+          content: '';
+          position: absolute;
+          border-left: 1px solid black;
+          height: 100%;
+          left: 10px;
+        }
+        padding-left: 20px;
+      }
+    }
+  }
+}

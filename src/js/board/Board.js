@@ -137,7 +137,7 @@ class Board {
     occupiedCellsChanged(changes) {
         const {oldValue = [], newValue = []} = changes.occupiedCells;
         const occupiedCellsSet = this.player1.occupiedCellsSet;
-        for (let i = 0; i < newValue.length; i++){
+        for (let i = 0; i < newValue.length; i++) {
             occupiedCellsSet.delete(oldValue[i]);
             occupiedCellsSet.add(newValue[i]);
         }
