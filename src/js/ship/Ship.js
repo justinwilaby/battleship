@@ -1,6 +1,7 @@
 import ShipGraphic from './ShipGraphic';
 import {findNodeAtPoint} from '../utils/findNodeAtPoint';
 import {alignElementToCell} from '../utils/alignElementToCell';
+import {bindableSetterChanged} from '../utils/bindableSetterChanged';
 
 class Ship {
     lastGoodTransform = [];
@@ -32,16 +33,7 @@ class Ship {
     }
 
     set shipModel(value) {
-        if (this._shipModel === value)
-            return;
-
-        if (this._shipModel) {
-            this._shipModel.removeChangeListener(this.modelChangeHandler);
-        }
-        this._shipModel = value;
-        if (value) {
-            this._shipModel.addChangeListener(this.modelChangeHandler);
-        }
+        bindableSetterChanged.call(this, '_shipModel', value, this.modelChangeHandler);
     }
 
     get draggable() {

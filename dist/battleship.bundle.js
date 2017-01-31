@@ -52,36 +52,35 @@
 	
 	var _Board2 = _interopRequireDefault(_Board);
 	
-	var _Console = __webpack_require__(24);
+	var _Console = __webpack_require__(25);
 	
 	var _Console2 = _interopRequireDefault(_Console);
 	
-	var _GamePlay = __webpack_require__(29);
+	var _GamePlay = __webpack_require__(30);
 	
 	var _GamePlay2 = _interopRequireDefault(_GamePlay);
 	
-	var _PlayerModel = __webpack_require__(34);
+	var _GameStateModel = __webpack_require__(35);
 	
-	var _PlayerModel2 = _interopRequireDefault(_PlayerModel);
+	var _GameStateModel2 = _interopRequireDefault(_GameStateModel);
 	
-	var _animateBoardRender = __webpack_require__(38);
+	var _animateBoardRender = __webpack_require__(40);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var player1 = new _PlayerModel2.default();
-	var player2 = new _PlayerModel2.default();
-	var board = new _Board2.default(player1, player2);
+	var gameStateModel = new _GameStateModel2.default();
+	var board = new _Board2.default(gameStateModel);
 	document.body.appendChild(board.render());
 	
 	var grids = board.boardGraphic.grids;
-	var console = new _Console2.default(grids[0], player1, player2);
+	var console = new _Console2.default(grids[0], gameStateModel);
 	document.body.appendChild(console.render());
 	
 	grids.forEach(function (grid) {
 	    (0, _animateBoardRender.animateBoard)(grid, 50, 10);
 	});
 	
-	var game = new _GamePlay2.default(grids, player1, player2);
+	var game = new _GamePlay2.default(grids, gameStateModel);
 
 /***/ },
 /* 1 */
@@ -458,18 +457,18 @@
 	
 	var _BoardGraphic2 = _interopRequireDefault(_BoardGraphic);
 	
-	var _findCells = __webpack_require__(20);
+	var _findCells = __webpack_require__(21);
 	
-	var _findCellAtPoint = __webpack_require__(22);
+	var _findCellAtPoint = __webpack_require__(23);
 	
-	var _getMoreCellsFromCell = __webpack_require__(23);
+	var _getMoreCellsFromCell = __webpack_require__(24);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var Board = function () {
-	    function Board(player1, player2) {
+	    function Board(gameState) {
 	        _classCallCheck(this, Board);
 	
 	        Object.defineProperty(this, 'lastHighlightedCells', {
@@ -488,6 +487,9 @@
 	        this.shipDropCallback = this.shipDropCallback.bind(this);
 	        this.shipModelChangeListener = this.shipModelChangeListener.bind(this);
 	        this.shipModelPreCommitListener = this.shipModelPreCommitListener.bind(this);
+	
+	        var player1 = gameState.player1,
+	            player2 = gameState.player2;
 	
 	        Object.assign(this, { player1: player1, player2: player2 });
 	    }
@@ -817,7 +819,7 @@
 	
 	
 	// module
-	exports.push([module.id, "#player1Grid, #player2Grid {\n  position: absolute; }\n  #player1Grid path.cell, #player2Grid path.cell {\n    transform: translate(225px, 225px);\n    transition: all .25s ease;\n    fill: transparent;\n    stroke: black; }\n\n#player1Grid {\n  left: 2rem; }\n\n#player2Grid {\n  right: 2rem; }\n", ""]);
+	exports.push([module.id, "#player1Grid, #player2Grid {\n  position: absolute; }\n  #player1Grid path.cell, #player2Grid path.cell {\n    transform: translate(225px, 225px);\n    transition: all .25s ease;\n    fill: transparent;\n    stroke: black; }\n\n#player1Grid {\n  left: 2rem; }\n\n#player2Grid {\n  right: 2rem; }\n  #player2Grid path.cell:hover {\n    fill: #ff0000; }\n", ""]);
 	
 	// exports
 
@@ -841,6 +843,8 @@
 	var _findNodeAtPoint = __webpack_require__(18);
 	
 	var _alignElementToCell2 = __webpack_require__(19);
+	
+	var _bindableSetterChanged = __webpack_require__(20);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1030,15 +1034,7 @@
 	            return this._shipModel;
 	        },
 	        set: function set(value) {
-	            if (this._shipModel === value) return;
-	
-	            if (this._shipModel) {
-	                this._shipModel.removeChangeListener(this.modelChangeHandler);
-	            }
-	            this._shipModel = value;
-	            if (value) {
-	                this._shipModel.addChangeListener(this.modelChangeHandler);
-	            }
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_shipModel', value, this.modelChangeHandler);
 	        }
 	    }, {
 	        key: 'draggable',
@@ -1619,6 +1615,26 @@
 
 /***/ },
 /* 20 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.bindableSetterChanged = bindableSetterChanged;
+	function bindableSetterChanged(property, value, handler) {
+	    if (this[property] === value) return;
+	
+	    if (this[property]) {
+	        this[property].removeChangeListener(handler);
+	    }
+	    this[property] = value;
+	    this[property].addChangeListener(handler);
+	}
+
+/***/ },
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1628,7 +1644,7 @@
 	});
 	exports.findCells = findCells;
 	
-	var _getCell = __webpack_require__(21);
+	var _getCell = __webpack_require__(22);
 	
 	function findCells(shipSegment, board, direction) {
 	    if (!shipSegment) {
@@ -1669,7 +1685,7 @@
 	}
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1686,7 +1702,7 @@
 	}
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1709,7 +1725,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1719,7 +1735,7 @@
 	});
 	exports.getMoreCellsFromCell = getMoreCellsFromCell;
 	
-	var _getCell = __webpack_require__(21);
+	var _getCell = __webpack_require__(22);
 	
 	function getMoreCellsFromCell(grid, cell, direction, n) {
 	    var cellRect = cell.getBoundingClientRect();
@@ -1742,7 +1758,7 @@
 	}
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1753,11 +1769,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(25);
+	__webpack_require__(26);
 	
-	var _randomizeShips = __webpack_require__(27);
+	var _randomizeShips = __webpack_require__(28);
 	
-	var _console = __webpack_require__(28);
+	var _bindableSetterChanged = __webpack_require__(20);
+	
+	var _console = __webpack_require__(29);
 	
 	var _console2 = _interopRequireDefault(_console);
 	
@@ -1766,15 +1784,17 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var Console = function () {
-	    function Console(grid, player1, player2) {
+	    function Console(grid, gameState) {
 	        _classCallCheck(this, Console);
 	
 	        Object.assign(this, {
-	            grid: grid,
-	            player1: player1,
-	            player2: player2,
 	            playerModelChangeHandler: this.playerModelChangeHandler.bind(this),
-	            randomizeButtonClickHandler: this.randomizeButtonClickHandler.bind(this)
+	            randomizeButtonClickHandler: this.randomizeButtonClickHandler.bind(this),
+	            startGameClickHandler: this.startGameClickHandler.bind(this),
+	            gameStateChangeHandler: this.gameStateChangeHandler.bind(this),
+	
+	            grid: grid,
+	            gameState: gameState
 	        });
 	    }
 	
@@ -1791,14 +1811,43 @@
 	        value: function postRenderActions() {
 	            var randomizeButton = this.element.querySelector('#randomize');
 	            randomizeButton.addEventListener('click', this.randomizeButtonClickHandler);
+	
+	            var startGameButton = this.element.querySelector('#start');
+	            startGameButton.addEventListener('click', this.startGameClickHandler);
 	        }
 	    }, {
 	        key: 'playerModelChangeHandler',
-	        value: function playerModelChangeHandler() {}
+	        value: function playerModelChangeHandler(source, changes) {}
+	    }, {
+	        key: 'gameStateChangeHandler',
+	        value: function gameStateChangeHandler(source, changes) {
+	            if ('playerTurn' in changes) {
+	                this.playerTurnChanged(changes);
+	            }
+	        }
+	    }, {
+	        key: 'playerTurnChanged',
+	        value: function playerTurnChanged(changes) {
+	            var player = changes.playerTurn.newValue;
+	            var statElements = this.element.querySelectorAll('.stats ul');
+	            statElements[0].classList = player === this.player1 ? 'selected' : '';
+	            statElements[1].classList = player === this.player2 ? 'selected' : '';
+	        }
 	    }, {
 	        key: 'randomizeButtonClickHandler',
 	        value: function randomizeButtonClickHandler() {
 	            (0, _randomizeShips.randomizeShips)(this.grid, this.player1);
+	        }
+	    }, {
+	        key: 'startGameClickHandler',
+	        value: function startGameClickHandler(event) {
+	            this.gameState.gameStarted = true;
+	            this.gameState.playerTurn = this.player1;
+	
+	            var buttons = this.element.querySelectorAll('#start, #randomize');
+	            buttons.forEach(function (button) {
+	                return button.setAttribute('disabled', '');
+	            });
 	        }
 	    }, {
 	        key: 'element',
@@ -1815,13 +1864,7 @@
 	            return this._player1;
 	        },
 	        set: function set(value) {
-	            if (this._player1 === value) return;
-	
-	            if (this._player1) {
-	                this._player1.removeChangeListener(this.playerModelChangeHandler);
-	            }
-	            this._player1 = value;
-	            this._player1.addChangeListener(this.playerModelChangeHandler);
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_player1', value, this.playerModelChangeHandler);
 	        }
 	    }, {
 	        key: 'player2',
@@ -1829,13 +1872,21 @@
 	            return this._player2;
 	        },
 	        set: function set(value) {
-	            if (this._player2 === value) return;
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_player2', value, this.playerModelChangeHandler);
+	        }
+	    }, {
+	        key: 'gameState',
+	        get: function get() {
+	            return this._gameState;
+	        },
+	        set: function set(value) {
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_gameState', value, this.gameStateChangeHandler);
 	
-	            if (this._player2) {
-	                this._player2.removeChangeListener(this.playerModelChangeHandler);
-	            }
-	            this._player2 = value;
-	            this._player2.addChangeListener(this.playerModelChangeHandler);
+	            var _ref = value || {},
+	                player1 = _ref.player1,
+	                player2 = _ref.player2;
+	
+	            Object.assign(this, { player1: player1, player2: player2 });
 	        }
 	    }]);
 	
@@ -1845,13 +1896,13 @@
 	exports.default = Console;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(26);
+	var content = __webpack_require__(27);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(6)(content, {});
@@ -1871,7 +1922,7 @@
 	}
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -1879,13 +1930,13 @@
 	
 	
 	// module
-	exports.push([module.id, "#console {\n  width: 300px;\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  top: 50%;\n  z-index: 9999; }\n  #console .stats {\n    margin-bottom: 20px;\n    display: flex; }\n    #console .stats ul {\n      width: 100%;\n      font-size: 24px; }\n      #console .stats ul li:first-of-type {\n        padding-bottom: 10px;\n        border-bottom: 1px solid black; }\n      #console .stats ul + ul {\n        position: relative;\n        padding-left: 20px; }\n        #console .stats ul + ul::before {\n          content: '';\n          position: absolute;\n          border-left: 1px solid black;\n          height: 100%;\n          left: 10px; }\n", ""]);
+	exports.push([module.id, "#console {\n  width: 300px;\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  top: 50%;\n  z-index: 9999; }\n  #console .stats {\n    margin-bottom: 20px;\n    display: flex; }\n    #console .stats ul {\n      color: white;\n      width: 100%;\n      font-size: 24px; }\n      #console .stats ul.selected {\n        color: green; }\n      #console .stats ul li:first-of-type {\n        padding-bottom: 10px;\n        border-bottom: 1px solid black; }\n      #console .stats ul + ul {\n        position: relative;\n        padding-left: 20px; }\n        #console .stats ul + ul::before {\n          content: '';\n          position: absolute;\n          border-left: 1px solid black;\n          height: 100%;\n          left: 10px; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1895,7 +1946,7 @@
 	});
 	exports.randomizeShips = randomizeShips;
 	
-	var _getCell = __webpack_require__(21);
+	var _getCell = __webpack_require__(22);
 	
 	var floor = Math.floor;
 	var random = Math.random;
@@ -1939,13 +1990,13 @@
 	}
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<section id=console> <div class=stats> <ul id=player1> <li>Player 1</li> <li>hits: <span>0</span></li> <li>attempts: <span>0</span></li> <li>accuracy: <span>0</span>%</li> </ul> <ul id=player2> <li>Computer</li> <li>hits: <span>0</span></li> <li>attempts: <span>0</span></li> <li>accuracy: <span>0</span>%</li> </ul> </div> <button id=randomize>Randomize Ships</button> <button id=start>Start Game</button> </section>";
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1956,13 +2007,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _getHitInfo = __webpack_require__(30);
+	var _getHitInfo = __webpack_require__(31);
 	
-	var _Computer = __webpack_require__(31);
+	var _bindableSetterChanged = __webpack_require__(20);
+	
+	var _Computer = __webpack_require__(32);
 	
 	var _Computer2 = _interopRequireDefault(_Computer);
 	
-	var _Human = __webpack_require__(33);
+	var _Human = __webpack_require__(34);
 	
 	var _Human2 = _interopRequireDefault(_Human);
 	
@@ -1985,7 +2038,7 @@
 	}
 	
 	var GamePlay = function () {
-	    function GamePlay(grids, player1, player2) {
+	    function GamePlay(grids, gameState) {
 	        _classCallCheck(this, GamePlay);
 	
 	        Object.defineProperty(this, 'playerTurn', {
@@ -1994,14 +2047,24 @@
 	            value: 0
 	        });
 	
-	        Object.assign(this, { grids: grids, player1: player1, player2: player2 });
+	        Object.assign(this, { grids: grids, gameState: gameState });
 	    }
 	
 	    _createClass(GamePlay, [{
+	        key: 'gameStateChangeHandler',
+	        value: function gameStateChangeHandler(source, changes) {
+	            if ('gameStarted' in changes && changes.gameStarted.newValue) {
+	                this.startGame();
+	            }
+	
+	            if ('playerTurn' in changes) {}
+	        }
+	    }, {
 	        key: 'startGame',
 	        value: function startGame() {
 	            this.human = new _Human2.default(this.grids[1], this.grids[0], this.player1);
 	            this.computer = new _Computer2.default(this.grids[0], this.grids[1], this.player2);
+	            this.gameState.playerTurn = this.human;
 	        }
 	    }, {
 	        key: 'player1',
@@ -2009,13 +2072,7 @@
 	            return this._player1;
 	        },
 	        set: function set(value) {
-	            if (this._player1 === value) return;
-	
-	            if (this._player1) {
-	                this._player1.removeChangeListener(playerModelChangeHandler);
-	            }
-	            this._player1 = value;
-	            this._player1.addChangeListener(playerModelChangeHandler);
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_player1', value, playerModelChangeHandler);
 	        }
 	    }, {
 	        key: 'player2',
@@ -2023,13 +2080,21 @@
 	            return this._player2;
 	        },
 	        set: function set(value) {
-	            if (this._player2 === value) return;
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_player2', value, playerModelChangeHandler);
+	        }
+	    }, {
+	        key: 'gameState',
+	        get: function get() {
+	            return this._gameState;
+	        },
+	        set: function set(value) {
+	            _bindableSetterChanged.bindableSetterChanged.call(this, '_gameState', value, this.gameStateChangeHandler);
 	
-	            if (this._player2) {
-	                this._player2.removeChangeListener(playerModelChangeHandler);
-	            }
-	            this._player2 = value;
-	            this._player2.addChangeListener(playerModelChangeHandler);
+	            var _ref = value || {},
+	                player1 = _ref.player1,
+	                player2 = _ref.player2;
+	
+	            Object.assign(this, { player1: player1, player2: player2 });
 	        }
 	    }]);
 	
@@ -2039,7 +2104,7 @@
 	exports.default = GamePlay;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2064,7 +2129,7 @@
 	}
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2073,11 +2138,11 @@
 	    value: true
 	});
 	
-	var _Player2 = __webpack_require__(32);
+	var _Player2 = __webpack_require__(33);
 	
 	var _Player3 = _interopRequireDefault(_Player2);
 	
-	var _randomizeShips = __webpack_require__(27);
+	var _randomizeShips = __webpack_require__(28);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2111,7 +2176,7 @@
 	exports.default = Computer;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2143,7 +2208,7 @@
 	exports.default = Player;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2154,11 +2219,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _Player2 = __webpack_require__(32);
+	var _Player2 = __webpack_require__(33);
 	
 	var _Player3 = _interopRequireDefault(_Player2);
 	
-	var _findCellAtPoint = __webpack_require__(22);
+	var _findCellAtPoint = __webpack_require__(23);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2203,7 +2268,57 @@
 	exports.default = Human;
 
 /***/ },
-/* 34 */
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _dec, _dec2, _class;
+	
+	var _PlayerModel = __webpack_require__(36);
+	
+	var _PlayerModel2 = _interopRequireDefault(_PlayerModel);
+	
+	var _bindProperty = __webpack_require__(37);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var GameStateModel = (_dec = (0, _bindProperty.bindable)('gameStarted'), _dec2 = (0, _bindProperty.bindable)('playerTurn'), _dec(_class = _dec2(_class = function () {
+	    function GameStateModel() {
+	        var gameStarted = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+	        var playerTurn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+	
+	        _classCallCheck(this, GameStateModel);
+	
+	        Object.assign(this, { gameStarted: gameStarted, playerTurn: playerTurn });
+	    }
+	
+	    _createClass(GameStateModel, [{
+	        key: 'player1',
+	        get: function get() {
+	            return this._player1 || (this._player1 = new _PlayerModel2.default());
+	        }
+	    }, {
+	        key: 'player2',
+	        get: function get() {
+	            return this._player2 || (this._player2 = new _PlayerModel2.default());
+	        }
+	    }]);
+	
+	    return GameStateModel;
+	}()) || _class) || _class);
+	exports.default = GameStateModel;
+
+/***/ },
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2216,11 +2331,11 @@
 	
 	var _dec, _class;
 	
-	var _bindProperty = __webpack_require__(35);
+	var _bindProperty = __webpack_require__(37);
 	
-	var _ShipTypeEnum = __webpack_require__(36);
+	var _ShipTypeEnum = __webpack_require__(38);
 	
-	var _ShipModel = __webpack_require__(37);
+	var _ShipModel = __webpack_require__(39);
 	
 	var _ShipModel2 = _interopRequireDefault(_ShipModel);
 	
@@ -2228,16 +2343,18 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	function generateDefaultShips() {
-	    var ships = [];
+	function generateDefaultShips(changeHandler) {
+	    var shipModels = [];
 	    _ShipTypeEnum.allShipTypes.forEach(function (type) {
 	        var maxAllowed = type.maxAllowed;
 	
 	        for (var i = 0; i < maxAllowed; i++) {
-	            ships.push(new _ShipModel2.default({ type: type }));
+	            var shipModel = new _ShipModel2.default({ type: type });
+	            shipModel.addChangeListener(changeHandler);
+	            shipModels.push(shipModel);
 	        }
 	    });
-	    return ships;
+	    return shipModels;
 	}
 	
 	var PlayerModel = (_dec = (0, _bindProperty.bindable)('incomingShots'), _dec(_class = function () {
@@ -2259,12 +2376,32 @@
 	            writable: true,
 	            value: new Set()
 	        });
+	
+	        this.shipModelChangedHandler = this.shipModelChangedHandler.bind(this);
 	    }
 	
 	    _createClass(PlayerModel, [{
+	        key: 'shipModelChangedHandler',
+	        value: function shipModelChangedHandler(source, changes) {
+	            if (!changes.occupiedCells) {
+	                return;
+	            }
+	            var newValue = this.occupiedCellsSet.size === _ShipTypeEnum.totalCells;
+	            var oldValue = this.allShipsPlaced;
+	            if (oldValue !== newValue) {
+	                this._allShipsPlaced = newValue;
+	                (0, _bindProperty.queueNotification)(this, 'allShipsPlaced', newValue, oldValue);
+	            }
+	        }
+	    }, {
 	        key: 'ships',
 	        get: function get() {
-	            return this._ships || (this._ships = generateDefaultShips());
+	            return this._ships || (this._ships = generateDefaultShips(this.shipModelChangedHandler));
+	        }
+	    }, {
+	        key: 'allShipsPlaced',
+	        get: function get() {
+	            return !!this._allShipsPlaced;
 	        }
 	    }]);
 	
@@ -2273,7 +2410,7 @@
 	exports.default = PlayerModel;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -2557,14 +2694,15 @@
 	            });
 	        };
 	    }
-
+	
 	    exports.bindable = bindable;
+	    exports.queueNotification = queueNotification;
 
 	    Object.defineProperty(exports, '__esModule', { value: true });
 	});
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2578,8 +2716,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var allShipTypes = exports.allShipTypes = [];
+	var totalCells = exports.totalCells = 0;
 	
-	var ShipTypeEnum = function () {
+	var ShipTypeEnum = exports.ShipTypeEnum = function () {
 	    function ShipTypeEnum(size, name, maxAllowed) {
 	        _classCallCheck(this, ShipTypeEnum);
 	
@@ -2589,6 +2728,7 @@
 	        Object.assign(this, { size: size, name: name, maxAllowed: maxAllowed });
 	        Object.freeze(this);
 	        allShipTypes.push(this);
+	        exports.totalCells = totalCells += size;
 	    }
 	
 	    _createClass(ShipTypeEnum, [{
@@ -2607,11 +2747,9 @@
 	ShipTypeEnum.CARRIER = new ShipTypeEnum(5, 'Carrier', 1);
 	
 	Object.freeze(ShipTypeEnum);
-	
-	exports.default = ShipTypeEnum;
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2624,7 +2762,7 @@
 	
 	var _dec, _dec2, _dec3, _class;
 	
-	var _bindProperty = __webpack_require__(35);
+	var _bindProperty = __webpack_require__(37);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2654,7 +2792,7 @@
 	exports.default = ShipModel;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports) {
 
 	'use strict';

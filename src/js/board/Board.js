@@ -10,13 +10,14 @@ class Board {
     player1;
     player2;
 
-    constructor(player1, player2) {
+    constructor(gameState) {
         this.shipDragStartCallback = this.shipDragStartCallback.bind(this);
         this.shipDragCallback = this.shipDragCallback.bind(this);
         this.shipDropCallback = this.shipDropCallback.bind(this);
         this.shipModelChangeListener = this.shipModelChangeListener.bind(this);
         this.shipModelPreCommitListener = this.shipModelPreCommitListener.bind(this);
 
+        const {player1, player2} = gameState;
         Object.assign(this, {player1, player2});
     }
 

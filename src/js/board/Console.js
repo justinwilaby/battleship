@@ -1,16 +1,22 @@
 import './console.scss';
 import {randomizeShips} from '../utils/randomizeShips';
+import {bindableSetterChanged} from '../utils/bindableSetterChanged';
 import consoleTemplate from './_console.html';
 
 class Console {
 
-    constructor(grid, player1, player2) {
+    randomizeButton;
+    startGameButton;
+
+    constructor(grid, gameState) {
         Object.assign(this, {
-            grid,
-            player1,
-            player2,
             playerModelChangeHandler: this.playerModelChangeHandler.bind(this),
-            randomizeButtonClickHandler: this.randomizeButtonClickHandler.bind(this)
+            randomizeButtonClickHandler: this.randomizeButtonClickHandler.bind(this),
+            startGameClickHandler: this.startGameClickHandler.bind(this),
+            gameStateChangeHandler: this.gameStateChangeHandler.bind(this),
+
+            grid,
+            gameState
         });
     }
 
@@ -27,14 +33,7 @@ class Console {
     }
 
     set player1(value) {
-        if (this._player1 === value)
-            return;
-
-        if (this._player1) {
-            this._player1.removeChangeListener(this.playerModelChangeHandler);
-        }
-        this._player1 = value;
-        this._player1.addChangeListener(this.playerModelChangeHandler);
+        bindableSetterChanged.call(this, '_player1', value, this.playerModelChangeHandler);
     }
 
     get player2() {
@@ -42,14 +41,17 @@ class Console {
     }
 
     set player2(value) {
-        if (this._player2 === value)
-            return;
+        bindableSetterChanged.call(this, '_player2', value, this.playerModelChangeHandler);
+    }
 
-        if (this._player2) {
-            this._player2.removeChangeListener(this.playerModelChangeHandler);
-        }
-        this._player2 = value;
-        this._player2.addChangeListener(this.playerModelChangeHandler);
+    get gameState() {
+        return this._gameState;
+    }
+
+    set gameState(value) {
+        bindableSetterChanged.call(this, '_gameState', value, this.gameStateChangeHandler);
+        const {player1, player2} = (value || {});
+        Object.assign(this, {player1, player2});
     }
 
     render() {
@@ -62,14 +64,39 @@ class Console {
     postRenderActions() {
         const randomizeButton = this.element.querySelector('#randomize');
         randomizeButton.addEventListener('click', this.randomizeButtonClickHandler);
+
+        const startGameButton = this.element.querySelector('#start');
+        startGameButton.addEventListener('click', this.startGameClickHandler);
+
+        Object.assign(this, {randomizeButton, startGameButton});
     }
 
-    playerModelChangeHandler() {
+    playerModelChangeHandler(source, changes) {
+        if (changes.allShipsPlaced && source.allShipsPlaced){
+          this.startGameButton.removeAttribute('disabled');
+        }
+    }
 
+    gameStateChangeHandler(source, changes) {
+        if ('playerTurn' in changes) {
+            this.playerTurnChanged(changes);
+        }
+    }
+
+    playerTurnChanged(changes) {
+        const player = changes.playerTurn.newValue;
+        const statElements = this.element.querySelectorAll('.stats ul');
+        statElements[0].classList = player === this.player1 ? 'selected' : '';
+        statElements[1].classList = player === this.player2 ? 'selected' : '';
     }
 
     randomizeButtonClickHandler() {
         randomizeShips(this.grid, this.player1);
+    }
+
+    startGameClickHandler(event) {
+        this.gameState.gameStarted = true;
+        [this.startGameButton, this.randomizeButton].forEach(button => button.setAttribute('disabled', ''));
     }
 }
 export default Console;

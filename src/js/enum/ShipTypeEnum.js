@@ -1,5 +1,6 @@
 export const allShipTypes = [];
-class ShipTypeEnum {
+export let totalCells = 0;
+export class ShipTypeEnum {
 
     size;
     name;
@@ -12,6 +13,7 @@ class ShipTypeEnum {
         Object.assign(this, {size, name, maxAllowed});
         Object.freeze(this);
         allShipTypes.push(this);
+        totalCells += (size * maxAllowed);
     }
 
     toString() {
@@ -24,5 +26,3 @@ ShipTypeEnum.DESTROYER = new ShipTypeEnum(4, 'Destroyer', 1);
 ShipTypeEnum.CARRIER = new ShipTypeEnum(5, 'Carrier', 1);
 
 Object.freeze(ShipTypeEnum);
-
-export default ShipTypeEnum;

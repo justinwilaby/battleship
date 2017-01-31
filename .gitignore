@@ -5,3 +5,4 @@
 /test-reports
 .DS_Store
 .idea/
+npm-debug.log
