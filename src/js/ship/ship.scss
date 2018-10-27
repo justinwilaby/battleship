@@ -1,7 +1,7 @@
 svg g[id^="ship_"] {
   &[draggable] {
     cursor: move;
-    path[id^="rotate_"]{
+    path[id^="rotate_"] {
       visibility: visible;
     }
   }
@@ -12,7 +12,7 @@ svg g[id^="ship_"] {
     user-select: none;
   }
 
-  path[id^="rotate_"]{
+  path[id^="rotate_"] {
     cursor: pointer;
     pointer-events: bounding-box;
     visibility: hidden;

@@ -2,7 +2,7 @@
   position: absolute;
   path.cell {
     transform: translate(225px, 225px);
-    transition: all .25s ease;
+    transition: all 1s ease;
     fill: transparent;
     stroke: black;
   }
@@ -14,7 +14,7 @@
 
 #player2Grid {
   right: 2rem;
-  path.cell:hover{
+  path.cell:hover {
     fill: #ff0000;
   }
 }

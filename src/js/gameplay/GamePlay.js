@@ -1,78 +1,99 @@
-import {getHitInfo} from '../utils/getHitInfo';
-import {bindableSetterChanged} from '../utils/bindableSetterChanged';
+import { bindableSetterChanged } from '../utils/bindableSetterChanged';
+import { getHitInfo } from '../utils/getHitInfo';
 import Computer from './Computer';
 import Human from './Human';
 
-function playerModelChangeHandler(source, changes) {
-    if (!('incomingShots' in changes)) {
-        return;
-    }
-    const targetCell = changes.incomingShots.newValue[0];
-    const hitInfo = getHitInfo(source, targetCell);
-    if (hitInfo) {
-        const {ship, index} = hitInfo;
-        ship.hits = (ship.hits[index] = true, ship.hits).concat();
-    }
-}
-
 class GamePlay {
-    grids;
-    computer;
-    human;
-    playerTurn = 0;
+  /**
+   * @type Array<Node>
+   */
+  grids;
+  /**
+   * @type {Computer}
+   */
+  computer;
+  /**
+   * @type {Human}
+   */
+  human;
+  /**
+   * @private
+   */
+  _player1;
+  /**
+   * @private
+   */
+  _player2;
+  /**
+   * @private
+   */
+  _gameState;
 
-    constructor(grids, gameState) {
-        this.gameStateChangeHandler = this.gameStateChangeHandler.bind(this);
-        Object.assign(this, {grids, gameState});
+  constructor(grids, gameState) {
+    this.gameStateChangeHandler = this.gameStateChangeHandler.bind(this);
+    this.playerModelChangeHandler = this.playerModelChangeHandler.bind(this);
+
+    Object.assign(this, {grids, gameState});
+  }
+  /**
+   *
+   * @returns {PlayerModel}
+   */
+  get player1() {
+    return this._player1;
+  }
+  set player1(value) {
+    bindableSetterChanged.call(this, '_player1', value, this.playerModelChangeHandler);
+  }
+  /**
+   *
+   * @returns {PlayerModel}
+   */
+  get player2() {
+    return this._player2;
+  }
+
+  set player2(value) {
+    bindableSetterChanged.call(this, '_player2', value, this.playerModelChangeHandler);
+  }
+
+  get gameState() {
+    return this._gameState;
+  }
+
+  set gameState(value) {
+    bindableSetterChanged.call(this, '_gameState', value, this.gameStateChangeHandler);
+    const {player1, player2} = ( value || {} );
+    Object.assign(this, {player1, player2});
+  }
+
+  playerModelChangeHandler(source, changes) {
+    const {playerTurn} = this.gameState;
+    if (!( 'outboundShots' in changes ) || source !== playerTurn) {
+      return;
     }
-
-    get player1() {
-        return this._player1;
+    const {outboundShots} = playerTurn;
+    const targetCell = outboundShots[ outboundShots.length - 1 ];
+    const opponent = playerTurn === this.player1 ? this.player2 : this.player1;
+    const hitInfo = getHitInfo(opponent, targetCell);
+    if (hitInfo) {
+      const {ship, index} = hitInfo;
+      ship.hits = ( ship.hits[ index ] = true, ship.hits ).concat();
     }
+    this.gameState.playerTurn = opponent;
+  }
 
-    set player1(value) {
-        bindableSetterChanged.call(this, '_player1', value, playerModelChangeHandler);
+  gameStateChangeHandler(source, changes) {
+    if ('gameStarted' in changes && changes.gameStarted.newValue) {
+      this.startGame();
     }
+  }
 
-    get player2() {
-        return this._player2;
-    }
-
-    set player2(value) {
-        bindableSetterChanged.call(this, '_player2', value, playerModelChangeHandler);
-    }
-
-    get gameState() {
-        return this._gameState;
-    }
-
-    set gameState(value) {
-        bindableSetterChanged.call(this, '_gameState', value, this.gameStateChangeHandler);
-        const {player1, player2} = (value || {});
-        Object.assign(this, {player1, player2});
-    }
-
-    gameStateChangeHandler(source, changes) {
-        if ('gameStarted' in changes && changes.gameStarted.newValue) {
-            this.startGame();
-        }
-
-        if ('playerTurn' in changes){
-            this.playerTurnChangedHandler(changes.playerTurn.newValue);
-        }
-    }
-
-    startGame() {
-        this.human = new Human(this.grids[1], this.grids[0], this.player1);
-        this.computer = new Computer(this.grids[0], this.grids[1], this.player2);
-        this.gameState.playerTurn = this.player1;
-    }
-
-    playerTurnChangedHandler(playerTurn){
-        if (playerTurn === this.gameState.player2){
-
-        }
-    }
+  startGame() {
+    this.human = new Human(this.grids[ 1 ], this.grids[ 0 ], this.player1, this.gameState);
+    this.computer = new Computer(this.grids[ 0 ], this.grids[ 1 ], this.player2, this.gameState);
+    this.gameState.playerTurn = this.player1;
+  }
 }
 
 export default GamePlay;

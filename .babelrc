@@ -1,0 +1,27 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "60"
+        }
+      }
+    ]
+  ],
+  "ignore": [
+    "**/*.d.ts",
+    "**/*.spec.ts"
+  ],
+  "sourceMaps": "inline",
+  "plugins": [
+    [
+      "@babel/proposal-decorators",
+      {
+        "decoratorsBeforeExport": true
+      }
+    ],
+    "@babel/proposal-class-properties",
+    "@babel/plugin-transform-runtime"
+  ]
+}

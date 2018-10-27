@@ -4,11 +4,11 @@ const path = require('path');
 module.exports = {
   entry: './src/js/index.js',
   output: {
-    path: './dist',
+    path: path.resolve('./dist'),
     filename: 'battleship.bundle.js',
     publicPath: 'http://localhost:8080/'
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   devServer: {
     hot: true,
     inline: true,
@@ -16,13 +16,13 @@ module.exports = {
     historyApiFallback: true,
   },
   resolve: {
-    extensions: ['', '.js'],
+    extensions: [ '.js' ],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.scss$/,
-        loaders: ["style-loader", "css-loader", "sass-loader"]
+        loaders: [ 'style-loader', 'css-loader', 'sass-loader' ]
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -30,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: 'html',
+        loader: 'html-loader',
         query: {
           minimize: true
         }
@@ -38,23 +38,16 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: './node_modules/',
-        query: {
-          presets: ['latest'],
-          plugins: [
-            "transform-object-rest-spread",
-            ["transform-class-properties", {"spec": true}],
-            "transform-decorators-legacy"
-          ],
-        }
+        exclude: '/node_modules',
       }
     ]
   },
 
-  plugins:[
+  plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body'
     }),
   ]
 };
+
